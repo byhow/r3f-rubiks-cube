@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { CubeFace } from "../utils/constants";
 
 interface CubeVisualProps {
@@ -6,11 +5,11 @@ interface CubeVisualProps {
 }
 
 const CubeView: React.FC<CubeVisualProps> = ({ cubeState }) => {
+  console.table(cubeState);
   return (
     <mesh>
       <meshNormalMaterial />
       <boxGeometry args={[2, 2, 2]} />
-      <pre>{JSON.stringify(cubeState, null, 2)}</pre>
     </mesh>
   );
 };

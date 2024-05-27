@@ -1,48 +1,70 @@
 // rotate-utils.ts
-import { CUBE_SIZE, FACES, CubeFace } from './constants';
+import { CUBE_SIZE, FACES, CubeFace } from "./constants";
 
 /**
  * rotate the rubik cube's face clockwise
- * 
+ *
  * @param {string[]} face - state of the game in representation of a string array
- * @returns 
+ * @returns {string[]} - the new state of the game
  */
 const rotateClockwise = (face: string[]): string[] => {
-  const newFace = [...face];
+  const newFace = Array(CUBE_SIZE * CUBE_SIZE).fill("");
   for (let i = 0; i < CUBE_SIZE; i++) {
     for (let j = 0; j < CUBE_SIZE; j++) {
-      newFace[i * CUBE_SIZE + j] = face[(CUBE_SIZE - j - 1) * CUBE_SIZE + i];
+      newFace[j * CUBE_SIZE + (CUBE_SIZE - i - 1)] = face[i * CUBE_SIZE + j];
     }
   }
   return newFace;
 };
 
+/**
+ * Rotate the rubik cube's face counter clockwise
+ * @param {string[]} face - state of the game in representation of a string array
+ * @returns {string[]} - the new state of the game
+ */
 const rotateCounterClockwise = (face: string[]): string[] => {
-  const newFace = [...face];
+  const newFace = Array(CUBE_SIZE * CUBE_SIZE).fill("");
   for (let i = 0; i < CUBE_SIZE; i++) {
     for (let j = 0; j < CUBE_SIZE; j++) {
-      newFace[i * CUBE_SIZE + j] = face[j * CUBE_SIZE + (CUBE_SIZE - i - 1)];
+      newFace[(CUBE_SIZE - j - 1) * CUBE_SIZE + i] = face[i * CUBE_SIZE + j];
     }
   }
   return newFace;
 };
 
+/**
+ * rotate the rubik's cube
+ * @param cubeState 
+ * @param face 
+ * @param direction 
+ * @returns 
+ */
 const rotateCube = (
   cubeState: Record<CubeFace, string[]>,
   face: CubeFace,
-  direction: 'cw' | 'ccw'
+  direction: "cw" | "ccw"
 ): Record<CubeFace, string[]> => {
   const newCubeState = { ...cubeState };
-  newCubeState[face] = direction === 'cw'
-    ? rotateClockwise(cubeState[face])
-    : rotateCounterClockwise(cubeState[face]);
-
+  newCubeState[face] =
+    direction === "cw"
+      ? rotateClockwise(cubeState[face])
+      : rotateCounterClockwise(cubeState[face]);
   // Update adjacent faces based on the rotation
   const adjacentFaces = getAdjacentFaces(face);
   adjacentFaces.forEach((adjacentFace: CubeFace) => {
-    const adjacentFaceIndices = getAdjacentFaceIndices(face, adjacentFace, direction);
-    const adjacentFaceValues = adjacentFaceIndices.map((index) => cubeState[adjacentFace][index]);
-    newCubeState[adjacentFace] = replaceValues(cubeState[adjacentFace], adjacentFaceIndices, adjacentFaceValues);
+    const adjacentFaceIndices = getAdjacentFaceIndices(
+      face,
+      adjacentFace,
+      direction
+    );
+    const adjacentFaceValues = adjacentFaceIndices.map(
+      (index) => cubeState[adjacentFace][index]
+    );
+    newCubeState[adjacentFace] = replaceValues(
+      cubeState[adjacentFace],
+      adjacentFaceIndices,
+      adjacentFaceValues
+    );
   });
 
   return newCubeState;
@@ -51,18 +73,18 @@ const rotateCube = (
 const getAdjacentFaces = (face: CubeFace): CubeFace[] => {
   // Return the adjacent faces based on the given face
   switch (face) {
-    case 'U':
-      return ['L', 'F', 'R', 'B'];
-    case 'L':
-      return ['U', 'F', 'D', 'B'];
-    case 'F':
-      return ['U', 'R', 'D', 'L'];
-    case 'R':
-      return ['U', 'B', 'D', 'F'];
-    case 'B':
-      return ['U', 'L', 'D', 'R'];
-    case 'D':
-      return ['L', 'F', 'R', 'B'];
+    case "U":
+      return ["L", "F", "R", "B"];
+    case "L":
+      return ["U", "F", "D", "B"];
+    case "F":
+      return ["U", "R", "D", "L"];
+    case "R":
+      return ["U", "B", "D", "F"];
+    case "B":
+      return ["U", "L", "D", "R"];
+    case "D":
+      return ["L", "F", "R", "B"];
     default:
       return [];
   }
@@ -71,7 +93,7 @@ const getAdjacentFaces = (face: CubeFace): CubeFace[] => {
 const getAdjacentFaceIndices = (
   face: CubeFace,
   adjacentFace: CubeFace,
-  direction: 'cw' | 'ccw'
+  direction: "cw" | "ccw"
 ): number[] => {
   const faceIndex = FACES.indexOf(face);
   const adjacentFaceIndex = FACES.indexOf(adjacentFace);
@@ -79,7 +101,7 @@ const getAdjacentFaceIndices = (
 
   const indices: number[] = [];
 
-  if (direction === 'cw') {
+  if (direction === "cw") {
     for (let i = 0; i < CUBE_SIZE; i++) {
       const baseIndex = i * CUBE_SIZE;
       for (let j = 0; j < CUBE_SIZE; j++) {
@@ -106,12 +128,13 @@ const getAdjacentFaceIndices = (
   return shiftedIndices;
 };
 
-const replaceValues = (array: string[], indices: number[], newValues: string[]): string[] => {
-  const newArray = [...array];
-  indices.forEach((index, i) => {
-    newArray[index] = newValues[i];
-  });
-  return newArray;
-};
+const replaceValues = (
+  array: string[],
+  indices: number[],
+  newValues: string[]
+): string[] =>
+  array.map((item, index) =>
+    indices.includes(index) ? newValues[indices.indexOf(index)] : item
+  );
 
 export { rotateCube };
