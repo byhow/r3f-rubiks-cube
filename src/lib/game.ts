@@ -1,5 +1,5 @@
 // rotate-utils.ts
-import { CUBE_SIZE, FACES, CubeFace } from "./constants";
+import { CUBE_SIZE, FACES, CubeFace } from "@/lib/constants";
 
 /**
  * rotate the rubik cube's face clockwise
