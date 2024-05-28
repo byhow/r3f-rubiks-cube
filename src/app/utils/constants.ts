@@ -8,3 +8,5 @@ export const initialCubeState: Record<CubeFace, string[]> = FACES.reduce((acc, f
   acc[face] = faceValues;
   return acc;
 }, {} as Record<CubeFace, string[]>);
+
+// Geometry of the cube

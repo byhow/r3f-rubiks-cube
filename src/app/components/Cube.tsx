@@ -3,7 +3,7 @@ import { useState } from "react";
 import { initialCubeState, FACES, CubeFace } from "../utils/constants";
 import { rotateCube } from "../utils/game";
 import { Button } from "@/components/ui/button";
-
+import Vis from "./Vis";
 const Cube3D: React.FC = () => {
   const [cubeState, setCubeState] =
     useState<Record<CubeFace, string[]>>(initialCubeState);
@@ -23,8 +23,8 @@ const Cube3D: React.FC = () => {
         <pointLight position={[-10, -10, -10]} />
       </Canvas> */}
       <h1 className="text-2xl font-bold">Rubik&apos;s Cube</h1>
-
-      <div>
+      <Vis />
+      {/* <div>
         {FACES.map((face) => (
           <div key={face} className="ml-4 space-x-4">
             <Button
@@ -43,7 +43,7 @@ const Cube3D: React.FC = () => {
             </Button>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
