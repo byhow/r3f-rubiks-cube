@@ -10,7 +10,7 @@ import {
   initializeGeometryCube,
   allGeometryMoves,
 } from "@/lib/moves";
-import { Sticker } from "@/lib/types";
+import { GeometryMove, Sticker } from "@/lib/types";
 import { camera } from "@/lib/render";
 import { Canvas } from "@react-three/fiber";
 import Cube3D from "./Cube3D";
@@ -24,6 +24,19 @@ export default function Cube() {
 
   const cube = drawGeometryCube("", stickers); // draw the cube rep from the stickers
   const allGMoves = allGeometryMoves();
+
+  // Group moves by first character
+  const groupedMoves = Object.values(allGMoves).reduce(
+    (groups: { [key: string]: GeometryMove[] }, move) => {
+      const key = move.name[0];
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(move);
+      return groups;
+    },
+    {}
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -61,18 +74,25 @@ export default function Cube() {
           </Canvas>
         </div>
       </div>
-      {Object.values(allGMoves)
-        .filter((m) => m.name.length == 1)
-        .map((move) => (
-          <Button
-            key={move.name}
-            variant="secondary"
-            onClick={() => setStickers(applyGeometryMoves(stickers, move.name))}
-            className="ml-4 mb-4"
-          >
-            Apply {move.name}
-          </Button>
+      <div className="flex flex-wrap">
+        {Object.entries(groupedMoves).map(([group, moves]) => (
+          <div key={group}>
+            <h2>{group}</h2>
+            {moves.map((move) => (
+              <Button
+                key={move.name}
+                variant="secondary"
+                onClick={() =>
+                  setStickers(applyGeometryMoves(stickers, move.name))
+                }
+                className="ml-4 mb-4"
+              >
+                Apply {move.name}
+              </Button>
+            ))}
+          </div>
         ))}
+      </div>
     </div>
   );
 }
