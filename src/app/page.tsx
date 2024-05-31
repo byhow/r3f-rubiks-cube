@@ -1,12 +1,12 @@
 import Cube from "./components/Cube";
-import Cube3D from "./components/Cube3D";
 
 export default function Home() {
   return (
-    <main>
+    <main className="ml-4 mt-4">
       <h1 className="text-2xl font-bold">Rubik&apos;s Cube</h1>
-      <Cube />
-      <Cube3D />
+      <div className="mt-4">
+        <Cube />
+      </div>
     </main>
   );
 }

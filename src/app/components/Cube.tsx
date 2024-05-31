@@ -11,6 +11,9 @@ import {
   allGeometryMoves,
 } from "@/lib/moves";
 import { Sticker } from "@/lib/types";
+import { camera } from "@/lib/render";
+import { Canvas } from "@react-three/fiber";
+import Cube3D from "./Cube3D";
 
 const SCALE_FACTOR = 15; // scale factor = length of each sticker in pixels.
 
@@ -25,7 +28,6 @@ export default function Cube() {
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-
     scaleCanvas(canvas, ctx);
     ctx.translate(SCALE_FACTOR / 2, SCALE_FACTOR / 2);
   }, []);
@@ -33,7 +35,6 @@ export default function Cube() {
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-
     // Clear the canvas
     ctx.clearRect(
       -SCALE_FACTOR / 2,
@@ -41,7 +42,6 @@ export default function Cube() {
       canvas.width,
       canvas.height
     );
-
     // draw the faces
     draw(ctx, cube, 0, 0, 3); // U
     draw(ctx, cube, 9, 3, 6); // R
@@ -53,7 +53,14 @@ export default function Cube() {
 
   return (
     <div>
-      <canvas ref={canvasRef} width={100} height={100} />
+      <div className="flex">
+        <canvas ref={canvasRef} width={150} height={150} />
+        <div className="w-48 h-48">
+          <Canvas camera={camera()}>
+            <Cube3D stickers={stickers} />
+          </Canvas>
+        </div>
+      </div>
       {Object.values(allGMoves)
         .filter((m) => m.name.length == 1)
         .map((move) => (

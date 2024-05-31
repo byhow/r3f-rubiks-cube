@@ -1,19 +1,19 @@
 "use client";
-import { initializeGeometryCube } from "@/lib/moves";
-import { Canvas } from "@react-three/fiber";
-
-import { camera, scene, stickerMesh } from "@/lib/render";
+import { useFrame, useThree } from "@react-three/fiber";
+import { stickerMesh } from "@/lib/render";
 import { Sticker } from "@/lib/types";
 
 type Cube3DProps = {
   stickers: Sticker[];
 };
 
-const Cube3D = ({ stickers }: Cube3DProps) => (
-  <Canvas
-    scene={scene(stickerMesh(stickers ?? initializeGeometryCube()))}
-    camera={camera()}
-  >
+const Cube3D = ({ stickers }: Cube3DProps) => {
+  const { scene } = useThree();
+  useFrame(() => {
+    scene.children = stickerMesh(stickers);
+  });
+
+  return (
     <mesh>
       <ambientLight intensity={Math.PI / 2} />
       <spotLight
@@ -27,7 +27,7 @@ const Cube3D = ({ stickers }: Cube3DProps) => (
       <boxGeometry />
       <meshStandardMaterial />
     </mesh>
-  </Canvas>
-);
+  );
+};
 
 export default Cube3D;
