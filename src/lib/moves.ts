@@ -1,6 +1,11 @@
 import { Vector3 } from "three";
 import { GeometryMove, Sticker } from "./types";
 
+/**
+ * convert a sticker to a face
+ * @param sticker 
+ * @returns 
+ */
 export const getFace = (sticker: Vector3) => {
   let { x, y, z } = sticker;
   return x === 3
@@ -18,7 +23,12 @@ export const getFace = (sticker: Vector3) => {
               : "X";
 };
 
-// solved gcube
+/**
+ * generate a Geometry Cube (with Stickers) for the simulation
+ * this is a solved version of the cube.
+ * 
+ * @returns 
+ */
 export const initializeGeometryCube = () => {
   let stickers = [];
   for (let face of [3, -3]) {
@@ -71,7 +81,11 @@ export const createGeometryMove = (
   predicate,
 });
 
-
+/**
+ * create possible geometry moves
+ * 
+ * @returns all geometry moves
+ */
 export const allGeometryMoves = () => {
   let create_move_set = (
     base_name: string,
@@ -111,7 +125,13 @@ export const allGeometryMoves = () => {
   return gmoves;
 };
 
-
+/**
+ * operate on geometry moves to the string representation
+ * 
+ * @param gcube 
+ * @param moves 
+ * @returns 
+ */
 export const applyGeometryMoves = (gcube: Sticker[], moves: string): Sticker[] =>
   moves
     .trim()
@@ -120,48 +140,13 @@ export const applyGeometryMoves = (gcube: Sticker[], moves: string): Sticker[] =
     .map((m) => allGeometryMoves()[m])
     .reduce(applyGeometryMove, gcube);
 
-
-
 /**
- * map permutation to cycle
- * @param cycle
- * @returns
+ * apply one geometry move to the sticker
+ * 
+ * @param move 
+ * @param sticker 
+ * @returns 
  */
-const permFromCycle = (cycle: number[]) => {
-  let perms = [];
-  for (let i = 0; i < cycle.length - 1; i++) {
-    perms.push([cycle[i], cycle[i + 1]]);
-  }
-  perms.push([cycle[cycle.length - 1], cycle[0]]);
-  return perms;
-};
-
-const S = (f: string, i: number) => {
-  return "URFDLB".indexOf(f) * 9 + i - 1;
-};
-
-const uMoves = [
-  permFromCycle([S("U", 1), S("U", 3), S("U", 9), S("U", 7)]),
-  permFromCycle([S("U", 2), S("U", 6), S("U", 8), S("U", 4)]),
-  permFromCycle([S("F", 1), S("L", 1), S("B", 1), S("R", 1)]),
-  permFromCycle([S("F", 2), S("L", 2), S("B", 2), S("R", 2)]),
-  permFromCycle([S("F", 3), S("L", 3), S("B", 3), S("R", 3)]),
-].flat();
-
-/**
- * 2d moves based on facelets
- * @param cube
- * @param perm
- * @returns
- */
-const applyMove = (cube: Array<string>, perm: number[][]) => {
-  let new_cube = [...cube];
-  for (let x of perm) {
-    new_cube[x[1]] = cube[x[0]];
-  }
-  return new_cube;
-};
-
 const applySticker = (move: GeometryMove, sticker: Sticker) =>
   move.predicate(sticker.pos) // does the move involve this position?
     ? {
@@ -173,9 +158,21 @@ const applySticker = (move: GeometryMove, sticker: Sticker) =>
     } // if so, rotate around axis with angle
     : sticker; // else, do nothing
 
-export const applyGeometryMove = (cube: Sticker[], move: GeometryMove) =>
+/**
+ * apply the each geometry move to the cube
+ * 
+ * @param cube 
+ * @param move 
+ * @returns 
+ */
+export const applyGeometryMove = (cube: Sticker[], move: GeometryMove): Sticker[] =>
   cube.map((s) => applySticker(move, s));
 
+/**
+ * convert the facelets to a string
+ * @param gcube 
+ * @returns 
+ */
 const convertFacelets = (gcube: Sticker[]): string => {
   // URFDLB
   let scube: string[] = [];
@@ -196,5 +193,12 @@ const convertFacelets = (gcube: Sticker[]): string => {
   return scube.join("");
 };
 
-export const drawGeometryCube = (scramble: string, currentBoard: Sticker[]) =>
+/**
+ * return the facelets of the cube from the scramble
+ * 
+ * @param scramble 
+ * @param currentBoard 
+ * @returns 
+ */
+export const drawGeometryCube = (scramble: string, currentBoard: Sticker[]): string =>
   convertFacelets(applyGeometryMoves(currentBoard, scramble));

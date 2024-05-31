@@ -1,6 +1,7 @@
 import { WebGLRenderer, Scene, Color, Vector3, PerspectiveCamera, BoxGeometry, MeshBasicMaterial, Mesh } from 'three'
-import { applyGeometryMove, getFace, initializeGeometryCube } from './moves';
+import { getFace } from './moves';
 import { Sticker } from './types';
+import { simColors } from './constants';
 
 export const renderer = () => {
   const renderer = new WebGLRenderer({ antialias: true })
@@ -9,8 +10,7 @@ export const renderer = () => {
   return renderer
 }
 
-
-export const scene = (meshes) => {
+export const scene = (meshes: any) => {
   const scene = new Scene();
   scene.background = new Color(0x444444);
   for (let mesh of meshes) scene.add(mesh);
@@ -25,17 +25,7 @@ export const camera = () => {
   return camera
 }
 
-
-const simColors = {
-  U: 16777215,
-  D: 16776960,
-  F: 43520,
-  B: 255,
-  L: 16753920,
-  R: 16711680
-}
-
-export const create_mesh = (sticker: Sticker) => {
+export const createMesh = (sticker: Sticker) => {
   const geometry = new BoxGeometry(1.6, 0.1, 1.6)
   const color = simColors[getFace(sticker.dst) as keyof typeof simColors]
   const material = new MeshBasicMaterial({ color })
@@ -51,50 +41,4 @@ export const create_mesh = (sticker: Sticker) => {
   return mesh
 }
 
-export const sticker_mesh = (cube) => cube.map(create_mesh)
-
-export function key_monitor(simCube): void {
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    const key = e.key.toUpperCase();
-    if (key === "ENTER") {
-      simCube = initializeGeometryCube();
-    } else if (key in key_mapping) {
-      simCube = applyGeometryMove(simCube, key_mapping[key]);
-    }
-  });
-}
-
-const key_mapping = {
-  5: "M",
-  6: "M",
-  I: "R",
-  K: "R'",
-  W: "B",
-  O: "B'",
-  S: "D",
-  L: "D'",
-  D: "L",
-  E: "L'",
-  J: "U",
-  F: "U'",
-  H: "F",
-  G: "F'",
-  ";": "y",
-  A: "y'",
-  U: "r",
-  R: "l'",
-  M: "r'",
-  V: "l",
-  T: "x",
-  Y: "x",
-  N: "x'",
-  B: "x'",
-  ".": "M'",
-  X: "M'",
-  P: "z",
-  Q: "z'",
-  Z: "d",
-  C: "u'",
-  ",": "u",
-  "/": "d'",
-}
+export const stickerMesh = (cube: Sticker[]) => cube.map(createMesh)

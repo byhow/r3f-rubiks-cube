@@ -69,3 +69,7 @@ And then a rotation of face F counter-clockwise:
  9              | D7  D8  D9 |
                 +------------+
 ```
+
+## TODOs
+- finish the 3d part of the cube
+- add the button to rotate the cube

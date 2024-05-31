@@ -1,13 +1,43 @@
-// export const CUBE_SIZE = 3
-// export const FACES = ['U', 'L', 'F', 'R', 'B', 'D'] as const; // TODO: convert to enum
-// export type CubeFace = typeof FACES[number];
+export const simColors = {
+  U: 16777215,
+  D: 16776960,
+  F: 43520,
+  B: 255,
+  L: 16753920,
+  R: 16711680
+}
 
-// // Initialize the cube with a default solved state
-// export const initialCubeState: Record<CubeFace, string[]> = FACES.reduce((acc, face) => {
-//   const faceValues = Array.from({ length: CUBE_SIZE ** 2 }, (_, index) => `${face}${index}`);
-//   acc[face] = faceValues;
-//   return acc;
-// }, {} as Record<CubeFace, string[]>);
-
-// // Geometry of the cube
-export { }
+export const key_mapping: Record<string, string> = {
+  5: "M",
+  6: "M",
+  I: "R",
+  K: "R'",
+  W: "B",
+  O: "B'",
+  S: "D",
+  L: "D'",
+  D: "L",
+  E: "L'",
+  J: "U",
+  F: "U'",
+  H: "F",
+  G: "F'",
+  ";": "y",
+  A: "y'",
+  U: "r",
+  R: "l'",
+  M: "r'",
+  V: "l",
+  T: "x",
+  Y: "x",
+  N: "x'",
+  B: "x'",
+  ".": "M'",
+  X: "M'",
+  P: "z",
+  Q: "z'",
+  Z: "d",
+  C: "u'",
+  ",": "u",
+  "/": "d'",
+}
