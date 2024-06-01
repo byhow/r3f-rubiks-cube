@@ -1,6 +1,6 @@
 ## Rubik's Cube
 
-A representation of a Rubik's cube state on a web app. It support the ability to do rotations of faces and display the current cube color state. The interface for rotation can be as simple as it needs to be. e.g it can be 6 buttons that select the face to rotate and a toggle for which direction. Your code should: - Emphasize correctness, readability, and maintainability - In areas with complex logic, be either self-documenting or documented - Leverage good, modern language practices
+A representation of a Rubik's cube state with `Three.js` and `react-three-fiber`. It support the ability to do rotations of faces and display the current cube color state. The interface for rotation can be as simple as it needs to be. e.g it can be 6 buttons that select the face to rotate and a toggle for which direction. Your code should: - Emphasize correctness, readability, and maintainability - In areas with complex logic, be either self-documenting or documented - Leverage good, modern language practices
 
 For specifics of display and rotation, you can refer to a Rubik's cube. For illustration, given an initial state of ...
 
@@ -69,7 +69,3 @@ And then a rotation of face F counter-clockwise:
  9              | D7  D8  D9 |
                 +------------+
 ```
-
-## TODOs
-- finish the 3d part of the cube
-- add the button to rotate the cube

@@ -2,6 +2,7 @@
 // the view of the cube in the browser using React
 "use client";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useState, useRef, useEffect } from "react";
 
 import {
@@ -69,15 +70,15 @@ export default function Cube() {
       <div className="flex">
         <canvas ref={canvasRef} width={150} height={150} />
         <div className="w-48 h-48">
-          <Canvas camera={camera()}>
+          <Canvas frameloop="demand" camera={camera()}>
             <Cube3D stickers={stickers} />
           </Canvas>
         </div>
       </div>
-      <div className="flex flex-wrap">
+      <div className="grid grid-cols-4 gap-2">
         {Object.entries(groupedMoves).map(([group, moves]) => (
           <div key={group}>
-            <h2>{group}</h2>
+            <Badge>{group}</Badge>
             {moves.map((move) => (
               <Button
                 key={move.name}

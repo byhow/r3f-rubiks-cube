@@ -1,4 +1,4 @@
-import { WebGLRenderer, Scene, Color, Vector3, PerspectiveCamera, BoxGeometry, MeshBasicMaterial, Mesh } from 'three'
+import { WebGLRenderer, Scene, Color, Vector3, PerspectiveCamera, BoxGeometry, MeshBasicMaterial, Mesh, EdgesGeometry, LineBasicMaterial, LineSegments } from 'three'
 import { getFace } from './moves';
 import { Sticker } from './types';
 import { simColors } from './constants';
@@ -26,11 +26,18 @@ export const camera = () => {
 }
 
 export const createMesh = (sticker: Sticker) => {
-  const geometry = new BoxGeometry(1.6, 0.1, 1.6)
+  const geometry = new BoxGeometry(1.99, 0.1, 1.99)
   const color = simColors[getFace(sticker.dst) as keyof typeof simColors]
   const material = new MeshBasicMaterial({ color })
   const mesh = new Mesh(geometry, material)
-  mesh.position.copy(sticker.pos) // IMPORTANT: we assign the position directly from the geometric cube
+  mesh.position.copy(sticker.pos) // we will assign the position directly from the geometric cube
+
+  // Create edges geometry
+  const edges = new EdgesGeometry(geometry);
+  const lineMaterial = new LineBasicMaterial({ color: 0x000000 }); // black lines
+  const lines = new LineSegments(edges, lineMaterial);
+  // Add the lines to the mesh
+  mesh.add(lines);
 
   // rotate the sticker plate 
   const current_face = getFace(sticker.pos)
