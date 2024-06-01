@@ -69,3 +69,5 @@ And then a rotation of face F counter-clockwise:
  9              | D7  D8  D9 |
                 +------------+
 ```
+
+The connotation of how the cube rotation works are derived from [here](https://ruwix.com/the-rubiks-cube/notation/advanced/)
